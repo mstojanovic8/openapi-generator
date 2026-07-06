@@ -653,6 +653,17 @@ public class TypeScriptFetchClientCodegenTest {
         TestUtils.assertFileContains(outerPlain, "export interface OuterPlain {");
     }
 
+    @Test(description = "anyToJSON should be defined in runtime.ts for any-typed form properties (fix #1877)")
+    public void testAnyToJSONIsDefinedInRuntime() throws Exception {
+        File output = generate(
+            Collections.emptyMap(),
+            "src/test/resources/3_0/typescript-fetch/any_type_property.json"
+        );
+
+        Path runtimePath = Paths.get(output + "/runtime.ts");
+        TestUtils.assertFileContains(runtimePath, "export function anyToJSON(value: any): any {");
+    }
+
     @Test(description = "Optional nullable fields should deserialize to null, not undefined (fix #5670)")
     public void testOptionalNullableFieldDeserializesToNull() throws Exception {
         File output = generate(
